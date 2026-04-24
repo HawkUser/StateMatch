@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>States & Capitals Trainer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>🇺🇸 States &amp; Capitals Trainer</h1>
+      <nav>
+        <button class="nav-btn active" data-mode="study">📖 Study</button>
+        <button class="nav-btn" data-mode="quiz">🧠 Quiz</button>
+        <button class="nav-btn" data-mode="match">🔗 Match</button>
+        <button class="nav-btn" data-mode="map">🗺️ Map</button>
+        <button class="nav-btn" data-mode="scores">📊 Scores</button>
+      </nav>
+    </header>
+
+    <!-- Study Mode -->
+    <section id="study" class="mode active">
+      <div class="study-controls">
+        <input type="text" id="search" placeholder="Search states or capitals..." aria-label="Search states or capitals">
+        <button id="shuffle-btn">🔀 Shuffle</button>
+      </div>
+      <div class="flashcard-container">
+        <div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Click to flip flashcard">
+          <div class="flashcard-inner">
+            <div class="flashcard-front">
+              <span class="label">State</span>
+              <span class="value" id="flash-state"></span>
+            </div>
+            <div class="flashcard-back">
+              <span class="label">Capital</span>
+              <span class="value" id="flash-capital"></span>
+            </div>
+          </div>
+        </div>
+        <div class="flashcard-nav">
+          <button id="prev-card">← Previous</button>
+          <span id="card-counter">1 / 50</span>
+          <button id="next-card">Next →</button>
+        </div>
+      </div>
+      <div id="study-list" class="study-list"></div>
+    </section>
+
+    <!-- Quiz Mode -->
+    <section id="quiz" class="mode">
+      <div class="quiz-setup" id="quiz-setup">
+        <h2>Quiz Settings</h2>
+        <div class="setting">
+          <label for="quiz-count">Number of questions:</label>
+          <select id="quiz-count">
+            <option value="10">10</option>
+            <option value="25" selected>25</option>
+            <option value="50">All 50</option>
+          </select>
+        </div>
+        <div class="setting">
+          <label for="quiz-type">Question type:</label>
+          <select id="quiz-type">
+            <option value="capital">Name the Capital</option>
+            <option value="state">Name the State</option>
+            <option value="mixed">Mixed</option>
+          </select>
+        </div>
+        <button id="start-quiz" class="btn-primary">Start Quiz</button>
+      </div>
+      <div class="quiz-active" id="quiz-active" hidden>
+        <div class="quiz-progress">
+          <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+          <span id="quiz-counter">1 / 25</span>
+          <span id="quiz-score">Score: 0</span>
+        </div>
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback" hidden></div>
+        <button id="next-question" class="btn-primary" hidden>Next Question →</button>
+      </div>
+      <div class="quiz-results" id="quiz-results" hidden>
+        <h2>Quiz Complete!</h2>
+        <div class="results-circle" id="results-circle">
+          <span class="results-percent" id="results-percent"></span>
+        </div>
+        <p id="results-text"></p>
+        <div class="results-details" id="results-details"></div>
+        <button id="retry-quiz" class="btn-primary">Try Again</button>
+      </div>
+    </section>
+
+    <!-- Match Mode -->
+    <section id="match" class="mode">
+      <div class="match-setup" id="match-setup">
+        <h2>Matching Game</h2>
+        <p>Match each state with its capital as fast as you can!</p>
+        <div class="setting">
+          <label for="match-count">Number of pairs:</label>
+          <select id="match-count">
+            <option value="5">5</option>
+            <option value="8" selected>8</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+        <button id="start-match" class="btn-primary">Start Matching</button>
+      </div>
+      <div class="match-active" id="match-active" hidden>
+        <div class="match-header">
+          <span id="match-timer">⏱ 0s</span>
+          <span id="match-errors">❌ Errors: 0</span>
+          <span id="match-pairs">Pairs: 0 / 8</span>
+        </div>
+        <div class="match-columns">
+          <div class="match-column" id="match-states"></div>
+          <div class="match-column" id="match-capitals"></div>
+        </div>
+      </div>
+      <div class="match-results" id="match-results" hidden>
+        <h2>🎉 All Matched!</h2>
+        <p id="match-time-result"></p>
+        <button id="retry-match" class="btn-primary">Play Again</button>
+      </div>
+    </section>
+
+    <!-- Map Quiz Mode -->
+    <section id="map" class="mode">
+      <div class="map-setup" id="map-setup">
+        <h2>Map Quiz</h2>
+        <p>Click on the correct state on the map!</p>
+        <div class="setting">
+          <label for="map-count">Number of questions:</label>
+          <select id="map-count">
+            <option value="10" selected>10</option>
+            <option value="25">25</option>
+            <option value="50">All 50</option>
+          </select>
+        </div>
+        <button id="start-map" class="btn-primary">Start Map Quiz</button>
+      </div>
+      <div class="map-active" id="map-active" hidden>
+        <div class="map-hud">
+          <span class="map-prompt">Find: <strong id="map-target-state"></strong></span>
+          <span id="map-counter">1 / 10</span>
+          <span id="map-score">Score: 0</span>
+        </div>
+        <div class="map-wrapper">
+          <svg id="us-map" viewBox="0 0 960 600" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+        <div class="map-feedback" id="map-feedback" hidden></div>
+      </div>
+      <div class="map-results" id="map-results" hidden>
+        <h2>Map Quiz Complete!</h2>
+        <div class="results-circle" id="map-results-circle">
+          <span class="results-percent" id="map-results-percent"></span>
+        </div>
+        <p id="map-results-text"></p>
+        <button id="retry-map" class="btn-primary">Try Again</button>
+      </div>
+    </section>
+
+    <!-- Scores -->
+    <section id="scores" class="mode">
+      <h2>Your Progress</h2>
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card">
+          <span class="stat-value" id="total-quizzes">0</span>
+          <span class="stat-label">Quizzes Taken</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value" id="avg-score">0%</span>
+          <span class="stat-label">Average Score</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value" id="best-score">0%</span>
+          <span class="stat-label">Best Score</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value" id="best-match">--</span>
+          <span class="stat-label">Best Match Time</span>
+        </div>
+      </div>
+      <h3>Most Missed States</h3>
+      <div id="missed-states" class="missed-list"><p class="empty">Take a quiz to see your weak spots!</p></div>
+      <button id="clear-stats" class="btn-danger">Clear All Progress</button>
+    </section>
+  </div>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://d3js.org/topojson.v3.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
