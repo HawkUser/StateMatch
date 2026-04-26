@@ -162,6 +162,7 @@ nav {
   font-size: 0.9rem;
 }
 .study-item .state { font-weight: 600; }
+.study-item .state small { color: var(--text-muted); font-weight: 400; }
 .study-item .capital { color: var(--text-muted); }
 
 /* Quiz Mode */

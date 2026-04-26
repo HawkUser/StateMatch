@@ -87,7 +87,7 @@ let cardIndex = 0;
 
 function updateFlashcard() {
   const card = studyCards[cardIndex];
-  document.getElementById('flash-state').textContent = card.state;
+  document.getElementById('flash-state').textContent = `${card.state} (${card.abbr})`;
   document.getElementById('flash-capital').textContent = card.capital;
   document.getElementById('card-counter').textContent = `${cardIndex + 1} / ${studyCards.length}`;
   document.getElementById('flashcard').classList.remove('flipped');
@@ -100,7 +100,7 @@ function renderStudyList(filter = '') {
     s.capital.toLowerCase().includes(filter.toLowerCase())
   );
   list.innerHTML = filtered.map(s =>
-    `<div class="study-item"><span class="state">${s.state}</span><span class="capital">${s.capital}</span></div>`
+    `<div class="study-item"><span class="state">${s.state} <small>(${s.abbr})</small></span><span class="capital">${s.capital}</span></div>`
   ).join('');
 }
 
@@ -164,7 +164,7 @@ function showQuestion() {
   document.getElementById('next-question').hidden = true;
 
   if (q.askCapital) {
-    document.getElementById('quiz-question').textContent = `What is the capital of ${q.state}?`;
+    document.getElementById('quiz-question').textContent = `What is the capital of ${q.state} (${q.abbr})?`;
   } else {
     document.getElementById('quiz-question').textContent = `${q.capital} is the capital of which state?`;
   }
@@ -206,7 +206,7 @@ function handleAnswer(btn, correct, q) {
     saveStats(stats);
   }
 
-  quizAnswers.push({ state: q.state, capital: q.capital, correct: isCorrect });
+  quizAnswers.push({ state: q.state, capital: q.capital, abbr: q.abbr, correct: isCorrect });
   document.getElementById('next-question').hidden = false;
 }
 
@@ -231,7 +231,7 @@ function finishQuiz() {
   document.getElementById('results-text').textContent = `${quizScore}/${quizQuestions.length} correct — ${msgs}`;
 
   document.getElementById('results-details').innerHTML = quizAnswers.map(a =>
-    `<div class="result-item ${a.correct ? 'correct' : 'wrong'}">${a.correct ? '✅' : '❌'} ${a.state} → ${a.capital}</div>`
+    `<div class="result-item ${a.correct ? 'correct' : 'wrong'}">${a.correct ? '✅' : '❌'} ${a.state} (${a.abbr}) → ${a.capital}</div>`
   ).join('');
 
   const stats = getStats();
